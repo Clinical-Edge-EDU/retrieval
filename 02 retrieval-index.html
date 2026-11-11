@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Close the Slides</title>
+<style>
+  :root{
+    --green:#1E3A34; --green-deep:#16302B; --ink:#20302B; --muted:#5B6B64;
+    --paper:#FFFFFF; --wash:#F4F6F5; --line:#DDE4E1;
+    --accent:#F2C94C; --accent-soft:#FBF0D2;
+    --right:#2E7D4F; --right-soft:#EAF4EE;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+  body{margin:0;font-family:Georgia,"Times New Roman",serif;color:var(--ink);background:var(--wash);line-height:1.55}
+  header.hero{background:var(--green);color:#fff;padding:2.4rem 1.2rem 2rem}
+  .wrap{max-width:840px;margin:0 auto}
+  .kicker{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.78rem;letter-spacing:.08em;opacity:.85;margin:0 0 .5rem}
+  header.hero h1{font-size:1.9rem;line-height:1.2;margin:0 0 .6rem;font-weight:700}
+  header.hero p.lede{margin:0;max-width:60ch;opacity:.93}
+  main{padding:1.6rem 1.2rem 4rem}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:1.5rem 1.6rem;margin:1.2rem 0}
+  .stagechip{display:inline-block;background:var(--accent-soft);border:1px solid var(--accent);border-radius:999px;padding:.15rem .8rem;font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.78rem;font-weight:600;color:var(--green-deep);margin-bottom:.6rem}
+  h2{font-size:1.35rem;margin:.2rem 0 .6rem}
+  h3{font-size:1.05rem;margin:1.2rem 0 .4rem}
+  .keybar{background:var(--accent-soft);border-left:5px solid var(--accent);padding:.7rem .9rem;border-radius:6px;margin:1rem 0;font-size:.97rem}
+  .strategy{background:var(--green);color:#fff;border-radius:10px;padding:1.2rem 1.3rem;margin:.4rem 0 1.2rem}
+  .strategy .label{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.74rem;letter-spacing:.09em;font-weight:700;color:var(--accent);margin:0 0 .35rem}
+  .strategy h3{margin:0 0 .45rem;font-size:1.2rem;color:#fff}
+  .strategy p{margin:.4rem 0;opacity:.95}
+  .case{background:var(--wash);border:1px solid var(--line);border-radius:8px;padding:.85rem 1rem;margin:.9rem 0 1.1rem;font-size:.98rem}
+  .stage{border:1px solid var(--line);border-radius:9px;padding:.85rem .95rem;margin:.6rem 0;background:#fff}
+  .stage .top{display:flex;gap:.7rem;align-items:flex-start}
+  .num{flex:none;width:1.75rem;height:1.75rem;border-radius:999px;background:var(--green);color:#fff;font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.85rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:.1rem}
+  .stage.ctrl .num{background:#C8791E}
+  .stage .names b{display:block;font-size:1.04rem;color:var(--green-deep)}
+  .stage .names span{font-size:.9rem;color:var(--muted)}
+  .stage label.fill{display:block;font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.82rem;font-weight:700;color:var(--green-deep);margin:.65rem 0 .25rem}
+  input[type=text]{width:100%;font-family:Georgia,serif;font-size:1rem;padding:.5rem .65rem;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink)}
+  input[type=text]:disabled{background:var(--wash);color:var(--muted)}
+  .answer{display:none;margin-top:.7rem;background:var(--right-soft);border-left:4px solid var(--right);border-radius:6px;padding:.6rem .8rem;font-size:.95rem}
+  .answer.show{display:block}
+  .answer b{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.74rem;letter-spacing:.05em;display:block;margin-bottom:.2rem;color:var(--green-deep)}
+  .score{display:none;margin-top:.6rem}
+  .score.show{display:flex;gap:.45rem;flex-wrap:wrap}
+  .score label{display:flex;gap:.4rem;align-items:center;border:1px solid var(--line);border-radius:999px;padding:.3rem .75rem;cursor:pointer;background:#fff;font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.85rem}
+  .score label:hover{border-color:var(--green)}
+  .score label.picked{border-color:var(--green);background:var(--wash)}
+  .score input{accent-color:var(--green);width:.95rem;height:.95rem;flex:none}
+  button{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.95rem;font-weight:600;border-radius:8px;border:1px solid var(--green);padding:.6rem 1.2rem;cursor:pointer}
+  button.primary{background:var(--green);color:#fff}
+  button.primary:hover{background:var(--green-deep)}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  #closing{display:none}
+  .restudy{background:var(--wash);border:1px solid var(--line);border-radius:8px;padding:.9rem 1rem;margin:.8rem 0}
+  .restudy ul{margin:.4rem 0 0;padding-left:1.2rem}
+  .restudy li{margin:.2rem 0}
+  .note{font-size:.85rem;color:var(--muted)}
+  .srmsg{position:absolute;left:-9999px}
+  footer{padding:1.5rem 1.2rem 2.5rem;color:var(--muted);font-size:.85rem;text-align:center}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">BEFORE THE CHECKPOINT</p>
+    <h1>Close the slides</h1>
+    <p class="lede">You have just read through Part 1 and seen the loop drawn out. Before you answer anything, map it onto an example the slides never walked through. It takes about five minutes and it is the habit this module is built around.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="card">
+    <div class="strategy">
+      <p class="label">THE STRATEGY</p>
+      <h3>Retrieval practice</h3>
+      <p>Pull the information out of memory before you look at it again. Rereading tells you whether something seems familiar. Retrieving tells you whether you can produce it, which is what an exam and a patient both require.</p>
+      <p>This is the one strategy that feels worse and works better. Expect it to be uncomfortable. That discomfort is the work.</p>
+    </div>
+
+    <h2>Map it onto sweating</h2>
+    <div class="case"><strong>The situation.</strong> A healthy adult is working outdoors on a hot afternoon. Within minutes they are sweating heavily and their skin is flushed.</div>
+    <p>Fill in each stage of the loop for this client, from memory, without scrolling back. Short answers are fine. The gaps are the point.</p>
+
+    <div class="stage" data-k="k1">
+      <div class="top"><span class="num">1</span><span class="names"><b>Set point</b><span>Normal desired condition</span></span></div>
+      <label class="fill" for="i1">For this client, the set point is</label>
+      <input type="text" id="i1" autocomplete="off" placeholder="What value is the body holding?">
+      <div class="answer" data-a="k1"><b>HOW IT MAPS</b>Core body temperature, held near 98.6 degrees Fahrenheit, or 37 degrees Celsius. The body defends that range continuously whether the person notices or not.</div>
+      <div class="score" data-s="k1"></div>
+    </div>
+
+    <div class="stage" data-k="k2">
+      <div class="top"><span class="num">2</span><span class="names"><b>Deviation</b><span>A change occurs away from the set point</span></span></div>
+      <label class="fill" for="i2">For this client, the deviation is</label>
+      <input type="text" id="i2" autocomplete="off" placeholder="What has changed, and in which direction?">
+      <div class="answer" data-a="k2"><b>HOW IT MAPS</b>Core temperature rising above the set point. Heat from the environment and heat generated by the work are both adding to the load. The direction of the deviation is upward, and that decides everything that follows.</div>
+      <div class="score" data-s="k2"></div>
+    </div>
+
+    <div class="stage" data-k="k3">
+      <div class="top"><span class="num">3</span><span class="names"><b>Sensor</b><span>Detects the deviation</span></span></div>
+      <label class="fill" for="i3">For this client, the sensor is</label>
+      <input type="text" id="i3" autocomplete="off" placeholder="What detects the change?">
+      <div class="answer" data-a="k3"><b>HOW IT MAPS</b>Thermoreceptors, in the skin and centrally in the hypothalamus. They register that temperature has risen above the defended range.</div>
+      <div class="score" data-s="k3"></div>
+    </div>
+
+    <div class="stage ctrl" data-k="k4">
+      <div class="top"><span class="num">4</span><span class="names"><b>Control center</b><span>Compares input to set point and determines the response</span></span></div>
+      <label class="fill" for="i4">For this client, the control center is</label>
+      <input type="text" id="i4" autocomplete="off" placeholder="What compares and decides?">
+      <div class="answer" data-a="k4"><b>HOW IT MAPS</b>The hypothalamus. It compares the temperature being reported against the set point, registers that the value is above the range, and calls for heat loss rather than heat generation.</div>
+      <div class="score" data-s="k4"></div>
+    </div>
+
+    <div class="stage" data-k="k5">
+      <div class="top"><span class="num">5</span><span class="names"><b>Effector</b><span>Carries out the instruction</span></span></div>
+      <label class="fill" for="i5">For this client, the effectors are</label>
+      <input type="text" id="i5" autocomplete="off" placeholder="What carries the response out?">
+      <div class="answer" data-a="k5"><b>HOW IT MAPS</b>Sweat glands and the blood vessels in the skin. The glands secrete fluid onto the surface. The vessels dilate, which is why the skin is flushed.</div>
+      <div class="score" data-s="k5"></div>
+    </div>
+
+    <div class="stage" data-k="k6">
+      <div class="top"><span class="num">6</span><span class="names"><b>Response opposes change</b><span>The response counteracts the original deviation</span></span></div>
+      <label class="fill" for="i6">For this client, the response opposes the change by</label>
+      <input type="text" id="i6" autocomplete="off" placeholder="How does it work against the deviation?">
+      <div class="answer" data-a="k6"><b>HOW IT MAPS</b>Removing heat rather than adding it. Sweat evaporates off the skin and carries heat with it, and dilated surface vessels radiate heat outward. The deviation was a rise, so the response produces a fall. That opposition is what makes the loop negative feedback.</div>
+      <div class="score" data-s="k6"></div>
+    </div>
+
+    <div class="stage" data-k="k7">
+      <div class="top"><span class="num">7</span><span class="names"><b>Return toward set point</b><span>Conditions return toward the normal range</span></span></div>
+      <label class="fill" for="i7">For this client, the loop ends when</label>
+      <input type="text" id="i7" autocomplete="off" placeholder="What tells you the loop has done its job?">
+      <div class="answer" data-a="k7"><b>HOW IT MAPS</b>Core temperature falls back into the normal range, and the sweating and flushing ease off because the sensors are no longer reporting a deviation. The loop does not switch off. It goes quiet and stays ready to run again.</div>
+      <div class="score" data-s="k7"></div>
+    </div>
+
+    <p style="margin-top:1.3rem">
+      <button class="primary" id="revealbtn" type="button">Show me the mapping</button>
+      <span class="note" id="hint" style="margin-left:.6rem">Fill in all seven first, even roughly.</span>
+    </p>
+    <p class="note" id="err" role="alert" hidden></p>
+  </section>
+
+  <section class="card" id="closing" aria-live="polite">
+    <span class="stagechip">WHAT THAT TOLD YOU</span>
+    <h2 id="verdicthead"></h2>
+    <p id="verdictbody"></p>
+
+    <div class="restudy" id="restudybox" hidden>
+      <strong>These stages did not come back</strong>
+      <ul id="restudylist"></ul>
+      <p class="note" style="margin:.5rem 0 0">These stages only, not the whole loop. Nothing is saved, so write them down somewhere you will see them again.</p>
+    </div>
+
+    <h3>Why this works</h3>
+    <p>The retrieving itself builds the memory. Every time you successfully pull an answer out of your head, you make it easier to pull out the next time. Rereading does not do this. It strengthens how familiar the page looks, not how available the knowledge is, which is why material can feel clear while you are reading it and vanish the moment something asks you to produce it.</p>
+    <p>Struggling to recall is not a sign this is going badly. It is the thing working. A stage you had to dig for will hold better afterward than one that arrived instantly, because the digging is what strengthens the path back to it.</p>
+    <p>A stage that would not come at all is information. It told you what you do not have yet, which rereading would have hidden behind a feeling of familiarity.</p>
+
+    <h3>Carry it forward</h3>
+    <p>The version you use in your own course is simple. Whatever you just read, close the book and write down what you can recall. Whatever will not come is what you study next, before you read the entire block again or read something new. Then close the book and try again.</p>
+
+    <div class="keybar"><strong>Now take the checkpoint.</strong> You are about to meet this loop running in the opposite direction. Commit to an answer before you look at the feedback, the same way you committed to these.</div>
+  </section>
+
+</main>
+
+<footer>Part 1 &middot; Learning to Study Nursing Content: An Active Approach &middot; Nothing entered on this page is stored or transmitted.</footer>
+<div class="srmsg" role="status" aria-live="polite" id="srlive"></div>
+
+<script>
+(function(){
+  "use strict";
+  var stages = {
+    k1:"Set point", k2:"Deviation", k3:"Sensor", k4:"Control center",
+    k5:"Effector", k6:"Response opposes change", k7:"Return toward set point"
+  };
+  var keys = Object.keys(stages);
+  var revealed = false;
+
+  function announce(m){ document.getElementById('srlive').textContent = m; }
+
+  // build score rows
+  keys.forEach(function(k){
+    var box = document.querySelector('.score[data-s="'+k+'"]');
+    [['got','I had it'],['part','Partly'],['miss','Could not produce it']].forEach(function(o){
+      var lab = document.createElement('label');
+      var inp = document.createElement('input');
+      inp.type='radio'; inp.name='sc_'+k; inp.value=o[0];
+      var sp = document.createElement('span'); sp.textContent=o[1];
+      lab.appendChild(inp); lab.appendChild(sp); box.appendChild(lab);
+      inp.addEventListener('change', function(){
+        box.querySelectorAll('label').forEach(function(l){ l.classList.remove('picked'); });
+        lab.classList.add('picked');
+        checkAll();
+      });
+    });
+  });
+
+  document.getElementById('revealbtn').addEventListener('click', function(){
+    var btn=this, err=document.getElementById('err');
+    var blank = keys.filter(function(k,i){ return document.getElementById('i'+(i+1)).value.trim()===''; });
+    if(blank.length){
+      err.textContent = 'Fill in all seven stages first, even roughly. ' + blank.length + ' still empty. Looking before you try defeats the point of the exercise.';
+      err.hidden=false;
+      announce('Some stages are still empty.');
+      return;
+    }
+    err.hidden=true;
+    keys.forEach(function(k,i){ document.getElementById('i'+(i+1)).disabled=true; });
+    document.querySelectorAll('.answer').forEach(function(a){ a.classList.add('show'); });
+    document.querySelectorAll('.score').forEach(function(s){ s.classList.add('show'); });
+    btn.disabled=true; btn.textContent='Compare, then mark each stage';
+    document.getElementById('hint').textContent='Mark each one honestly. Nobody sees this.';
+    revealed=true;
+    announce('The mapping is now shown. Mark how each stage went.');
+  });
+
+  function checkAll(){
+    if(!revealed) return;
+    var picks={};
+    var all = keys.every(function(k){
+      var p=document.querySelector('input[name="sc_'+k+'"]:checked');
+      if(p){ picks[k]=p.value; return true; }
+      return false;
+    });
+    if(!all) return;
+
+    var gaps = keys.filter(function(k){ return picks[k]!=='got'; });
+    var head=document.getElementById('verdicthead'), body=document.getElementById('verdictbody');
+
+    if(gaps.length===0){
+      head.textContent='You rebuilt the whole loop';
+      body.textContent='Seven stages on an example the slides never walked through, from memory. That is different from the diagram looking clear while you were reading it. You can now take this loop to a condition you have not studied, which is what the rest of the module asks you to do.';
+    } else if(gaps.length>=5){
+      head.textContent='Most of the loop would not come back';
+      body.textContent='This is the most useful outcome on the page, and it is a common one. The diagram was on screen minutes ago and it made sense at the time. The gap between a diagram making sense and your being able to rebuild it is exactly what rereading hides and what an exam exposes. You now know which stages to go back to, which you did not know five minutes ago.';
+    } else {
+      head.textContent='Part of the loop came back';
+      body.textContent='The stages you filled are yours. The ones you could not are still on the slide rather than in memory, and looking at the diagram again will not change that. Covering it and rebuilding those specific stages will.';
+    }
+
+    var box=document.getElementById('restudybox'), list=document.getElementById('restudylist');
+    if(gaps.length){
+      list.innerHTML='';
+      gaps.forEach(function(k){
+        var li=document.createElement('li');
+        li.textContent = stages[k];
+        list.appendChild(li);
+      });
+      box.hidden=false;
+    } else { box.hidden=true; }
+
+    var c=document.getElementById('closing');
+    c.style.display='block';
+    c.scrollIntoView({behavior:'smooth',block:'start'});
+    announce('Your result is shown below.');
+  }
+})();
+</script>
+</body>
+</html>
